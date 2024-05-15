@@ -9,6 +9,7 @@ const MainComponent = () => {
   const [pokemon,setPokemon] = useState([]);
   
   const [clickedPokemon,setClickedPokemon] = useState([])
+  const [highScore,setHighScore] = useState(0)
 
   const getPokemon = async(result) => {
     
@@ -49,6 +50,7 @@ const MainComponent = () => {
 
       setClickedPokemon(prevClicked => [...prevClicked,pokeId])
       console.log(clickedPokemon)
+      setHighScore((prevScore) =>( clickedPokemon.length > prevScore? clickedPokemon.length : prevScore) )
     }
     else {
           console.log("duplicate id")
@@ -60,7 +62,8 @@ const MainComponent = () => {
   return (
     <div className="max-w-[1440px] m-auto bg-slate-400 text-slate-100 
     min-h-screen ">
-        <Header count ={clickedPokemon} />
+        <Header count ={clickedPokemon}
+                highScore ={highScore} />
         <div className="px-2 py-3 grid grid-cols-2 gap-10 sm:grid-cols-3 md:grid-cols-4 ">
            {
               pokemon.map(poke => (
