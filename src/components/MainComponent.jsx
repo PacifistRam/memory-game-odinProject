@@ -34,7 +34,7 @@ const MainComponent = () => {
 
   useEffect(() =>{
     const pokeApi = async() => {
-      const url = "https://pokeapi.co/api/v2/pokemon/?offset=50&limit=16"
+      const url = "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=16"
 
       const res = await axios.get(url);
       const result = res.data.results
@@ -44,24 +44,30 @@ const MainComponent = () => {
     pokeApi();
   },[])
 
+  const handleShuffleArray = () => {
+    const shuffledArray = pokemon.map(item => item).sort(() => Math.random() - 0.5)
+    setPokemon(shuffledArray)
+  }
 
   const handleClick = (pokeId) => {
     if(!clickedPokemon.includes(pokeId)){
 
       setClickedPokemon(prevClicked => [...prevClicked,pokeId])
-      console.log(clickedPokemon)
-      setHighScore((prevScore) =>( clickedPokemon.length > prevScore? clickedPokemon.length : prevScore) )
+
+      const newHighScore = Math.max(clickedPokemon.length + 1,highScore)
+      setHighScore(newHighScore); 
+      handleShuffleArray();
+      
     }
     else {
-          console.log("duplicate id")
           setClickedPokemon([])
           alert("You loose")
     }
   }
 
   return (
-    <div className="max-w-[1440px] m-auto bg-slate-400 text-slate-100 
-    min-h-screen ">
+    <div className="max-w-[1440px] m-auto bg-cyan-600 text-slate-100 
+    min-h-screen  ">
         <Header count ={clickedPokemon}
                 highScore ={highScore} />
         <div className="px-2 py-3 grid grid-cols-2 gap-10 sm:grid-cols-3 md:grid-cols-4 ">
